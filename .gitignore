@@ -1,3 +1,13 @@
+# Checkpoints / weights of neural network
+checkpoints/
+weights/
+
+# VSCode
+.vscode/
+
+# data
+data/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
