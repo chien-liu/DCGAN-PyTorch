@@ -25,7 +25,7 @@ torch.use_deterministic_algorithms(True)  # Needed for reproducible results
 
 
 # Root directory for dataset
-dataroot = Path("data/celeba")
+dataroot = Path("data/digiface")
 
 # Number of workers for dataloader
 workers = 6
@@ -50,7 +50,7 @@ ngf = 64
 ndf = 64
 
 # Number of training epochs
-num_epochs = 5
+num_epochs = 20
 
 # Learning rate for optimizers
 lr = 0.0002
@@ -162,7 +162,7 @@ if not checkpointRoot.exists():
 # Load checkpoints
 checkpointPath = checkpointRoot / 'checkpoint.tar'
 if checkpointPath.exists():
-    print()
+    print('Loading chechpoint... ', end='')
     checkpoint = torch.load(checkpointPath)
     netD.load_state_dict(checkpoint['netD_state_dict'])
     netG.load_state_dict(checkpoint['netG_state_dict'])
@@ -179,6 +179,7 @@ if checkpointPath.exists():
     
     netG.train()
     netD.train()
+    print('Done!')
 
 print("Starting Training Loop...")
 
