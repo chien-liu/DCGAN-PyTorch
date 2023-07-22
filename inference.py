@@ -9,11 +9,13 @@ import torch.nn.parallel
 import torch.utils.data
 import torchvision.utils as vutils
 from torch import nn
+import torchvision.datasets as dset
+from torchvision import transforms
 
 from models import Generator
 
 # Set random seed for reproducibility
-manualSeed = 999
+manualSeed = 777
 # manualSeed = random.randint(1, 10000) # use if you want new results
 print("Random Seed: ", manualSeed)
 random.seed(manualSeed)
@@ -75,7 +77,32 @@ with torch.no_grad():
 img_list.append(vutils.make_grid(fake, padding=2, normalize=True))
 
 # Plot the fake images from the last epoch
-plt.subplot(1, 1, 1)
+# Plot the real images
+# Create the dataset
+dataroot = Path("data/digiface")
+image_size = 64
+dataset = dset.ImageFolder(root=dataroot,
+                           transform=transforms.Compose([
+                               transforms.Resize(image_size),
+                               transforms.CenterCrop(image_size),
+                               transforms.ToTensor(),
+                               transforms.Normalize(
+                                   (0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+                           ]))
+
+# Create the dataloader
+dataloader = torch.utils.data.DataLoader(dataset, batch_size=64,
+                                         shuffle=True, num_workers=1)
+real_batch = next(iter(dataloader))
+
+plt.figure(figsize=(15, 15))
+plt.subplot(1, 2, 1)
+plt.axis("off")
+plt.title("Real Images")
+plt.imshow(np.transpose(vutils.make_grid(real_batch[0].to(device)[
+           :64], padding=5, normalize=True).cpu(), (1, 2, 0)))
+
+plt.subplot(1, 2, 2)
 plt.axis("off")
 plt.title("Fake Images")
 plt.imshow(np.transpose(img_list[-1], (1, 2, 0)))
