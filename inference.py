@@ -107,3 +107,19 @@ plt.axis("off")
 plt.title("Fake Images")
 plt.imshow(np.transpose(img_list[-1], (1, 2, 0)))
 plt.show()
+
+# Plot results of noise arithmetic
+noise1 = fixed_noise[25, :, :, :]
+noise2 = fixed_noise[27, :, :, :]
+noise3 = fixed_noise[39, :, :, :]
+noise4 = noise1 - noise2 + noise3
+noise = torch.stack([noise1, noise2, noise3, noise4], axis=0)
+with torch.no_grad():
+    fake = netG(noise).detach().cpu()
+img_list.append(vutils.make_grid(fake, padding=2, normalize=True))
+
+plt.figure(figsize=(15, 15))
+plt.axis("off")
+plt.title("Face right profile w/ glasses - Face right profile + Face left profile = Face left profile w/ glasses", fontsize=16)
+plt.imshow(np.transpose(img_list[-1], (1, 2, 0)))
+plt.show()

@@ -10,8 +10,15 @@ Deep Convolutional Generative Adversarial Networks (DCGAN) is a class of generat
 * Data bias - DigiFace-1M is generated in a controlled pipeline, so that the racial distribution is guaranteed to be balance.
 
 ## Results
+### Loss in Training Process
+![](assets/training/loss.png)
+
 ### Generated Images compared with Dataset Images
 ![](assets/results/real_and_fake.png)
+
+### Noise Arithmetic
+![](assets/results/noise_arithmetic.png)
+
 
 
 ## Reference
