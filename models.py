@@ -1,3 +1,10 @@
+"""
+DCGAN Models
+============
+
+The models are adapted from PyTorch Tutorial <https://github.com/pytorch/tutorials/blob/main/beginner_source/dcgan_faces_tutorial.py>
+"""
+
 
 from torch import nn
 
