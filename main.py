@@ -21,12 +21,12 @@ def parse_args():
         p = Path(s)
         if not p.parent.exists():
             print(f'Parent directory {p.parent} doesn\'t exist.')
-            exit(0)
+            exit(1)
         if p.suffix not in ['.jpg', '.png', '.svg', '.pdf']:
             print(
                 f'Suffix must be either .jpg, .png, .svg, or .pdf. (Given {p.name})',
             )
-            exit(0)
+            exit(1)
         return p
 
     parser = argparse.ArgumentParser(
