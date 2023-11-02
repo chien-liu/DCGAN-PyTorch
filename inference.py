@@ -1,15 +1,16 @@
+from __future__ import annotations
+
 import random
 import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
-import torch
 import torch.nn.parallel
 import torch.utils.data
+import torchvision.datasets as dset
 import torchvision.utils as vutils
 from torch import nn
-import torchvision.datasets as dset
 from torchvision import transforms
 
 from models import Generator
@@ -17,7 +18,7 @@ from models import Generator
 # Set random seed for reproducibility
 manualSeed = 777
 # manualSeed = random.randint(1, 10000) # use if you want new results
-print("Random Seed: ", manualSeed)
+print('Random Seed: ', manualSeed)
 random.seed(manualSeed)
 torch.manual_seed(manualSeed)
 torch.use_deterministic_algorithms(True)  # Needed for reproducible results
@@ -38,8 +39,11 @@ ndf = 64
 ngpu = 1
 
 # Decide which device we want to run on
-device = torch.device("cuda:0" if (
-    torch.cuda.is_available() and ngpu > 0) else "cpu")
+device = torch.device(
+    'cuda:0' if (
+        torch.cuda.is_available() and ngpu > 0
+    ) else 'cpu',
+)
 
 # Create the generator
 netG = Generator(ngpu, nc, nz, ngf).to(device)
@@ -70,7 +74,7 @@ if checkpointPath.exists():
 else:
     sys.exit(0)
 
-print("Starting Inference...")
+print('Starting Inference...')
 
 with torch.no_grad():
     fake = netG(fixed_noise).detach().cpu()
@@ -79,32 +83,44 @@ img_list.append(vutils.make_grid(fake, padding=2, normalize=True))
 # Plot the fake images from the last epoch
 # Plot the real images
 # Create the dataset
-dataroot = Path("data/digiface")
+dataroot = Path('data/digiface')
 image_size = 64
-dataset = dset.ImageFolder(root=dataroot,
-                           transform=transforms.Compose([
-                               transforms.Resize(image_size),
-                               transforms.CenterCrop(image_size),
-                               transforms.ToTensor(),
-                               transforms.Normalize(
-                                   (0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-                           ]))
+dataset = dset.ImageFolder(
+    root=dataroot,
+    transform=transforms.Compose([
+        transforms.Resize(image_size),
+        transforms.CenterCrop(image_size),
+        transforms.ToTensor(),
+        transforms.Normalize(
+            (0.5, 0.5, 0.5), (0.5, 0.5, 0.5),
+        ),
+    ]),
+)
 
 # Create the dataloader
-dataloader = torch.utils.data.DataLoader(dataset, batch_size=64,
-                                         shuffle=True, num_workers=1)
+dataloader = torch.utils.data.DataLoader(
+    dataset, batch_size=64,
+    shuffle=True, num_workers=1,
+)
 real_batch = next(iter(dataloader))
 
 plt.figure(figsize=(15, 15))
 plt.subplot(1, 2, 1)
-plt.axis("off")
-plt.title("Real Images")
-plt.imshow(np.transpose(vutils.make_grid(real_batch[0].to(device)[
-           :64], padding=5, normalize=True).cpu(), (1, 2, 0)))
+plt.axis('off')
+plt.title('Real Images')
+plt.imshow(
+    np.transpose(
+        vutils.make_grid(
+            real_batch[0].to(device)[
+                :64
+            ], padding=5, normalize=True,
+        ).cpu(), (1, 2, 0),
+    ),
+)
 
 plt.subplot(1, 2, 2)
-plt.axis("off")
-plt.title("Fake Images")
+plt.axis('off')
+plt.title('Fake Images')
 plt.imshow(np.transpose(img_list[-1], (1, 2, 0)))
 plt.show()
 
@@ -119,7 +135,10 @@ with torch.no_grad():
 img_list.append(vutils.make_grid(fake, padding=2, normalize=True))
 
 plt.figure(figsize=(15, 15))
-plt.axis("off")
-plt.title("Face right profile w/ glasses - Face right profile + Face left profile = Face left profile w/ glasses", fontsize=16)
+plt.axis('off')
+plt.title(
+    'Face right profile w/ glasses - Face right profile + \
+          Face left profile = Face left profile w/ glasses', fontsize=16,
+)
 plt.imshow(np.transpose(img_list[-1], (1, 2, 0)))
 plt.show()

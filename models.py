@@ -2,9 +2,10 @@
 DCGAN Models
 ============
 
-The models are adapted from PyTorch Tutorial <https://github.com/pytorch/tutorials/blob/main/beginner_source/dcgan_faces_tutorial.py>
+The models are adapted from PyTorch Tutorial
+<https://github.com/pytorch/tutorials/blob/main/beginner_source/dcgan_faces_tutorial.py>
 """
-
+from __future__ import annotations
 
 from torch import nn
 
@@ -15,7 +16,8 @@ class Generator(nn.Module):
     ----
     ngpu (int): Number of GPUs available. Use 0 for CPU mode.
 
-    nc (int): Number of channels in the training images. For color images this is 3, nc = 3.
+    nc (int): Number of channels in the training images.
+              For color images this is 3, nc = 3.
 
     nz (int): Size of z latent vector (i.e. size of generator input)
 
@@ -44,7 +46,7 @@ class Generator(nn.Module):
             nn.ReLU(True),
             # state size. ``(ngf) x 32 x 32``
             nn.ConvTranspose2d(ngf, nc, 4, 2, 1, bias=False),
-            nn.Tanh()
+            nn.Tanh(),
             # state size. ``(nc) x 64 x 64``
         )
 
@@ -58,7 +60,8 @@ class Discriminator(nn.Module):
     ----
     ngpu (int): Number of GPUs available. Use 0 for CPU mode.
 
-    nc (int): Number of channels in the training images. For color images this is 3, nc = 3.
+    nc (int): Number of channels in the training images.
+              For color images this is 3, nc = 3.
 
     ndf (int): Size of feature maps in discriminator.
     '''
@@ -84,7 +87,7 @@ class Discriminator(nn.Module):
             nn.LeakyReLU(0.2, inplace=True),
             # state size. ``(ndf*8) x 4 x 4``
             nn.Conv2d(ndf * 8, 1, 4, 1, 0, bias=False),
-            nn.Sigmoid()
+            nn.Sigmoid(),
         )
 
     def forward(self, input):
