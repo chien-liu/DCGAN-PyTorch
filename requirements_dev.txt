@@ -1,1 +1,2 @@
+ipython>=8.16.1
 pre-commit
