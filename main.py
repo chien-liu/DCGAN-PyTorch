@@ -37,6 +37,11 @@ def parse_args():
         '-s', '--save-file', type=valid_path,
         help='the path to store output image. If not set, the image is shown via matplotlib.',
     )
+    parser.add_argument(
+        '--dry-run', action='store_true',
+        help='Generate the image without loading pre-train weight, and then neither\
+            show or save the output image.',
+    )
     return parser.parse_args()
 
 
@@ -81,17 +86,17 @@ def main():
     # Lists to save outputs from Generator netG
     img_list = []
 
-    # Load checkpoints
-    checkpointRoot = Path('checkpoints')
-    checkpointPath = checkpointRoot / 'checkpoint.tar'
-    if checkpointPath.exists():
-        checkpoint = torch.load(checkpointPath)
-        netG.load_state_dict(checkpoint['netG_state_dict'])
-        netG.to(device)
-        netG.eval()
-
-    else:
-        sys.exit(1)
+    # Load checkpoints if arg '--dry-run' is not set
+    if not args.dry_run:
+        checkpointRoot = Path('checkpoints')
+        checkpointPath = checkpointRoot / 'checkpoint.tar'
+        if checkpointPath.exists():
+            checkpoint = torch.load(checkpointPath)
+            netG.load_state_dict(checkpoint['netG_state_dict'])
+            netG.to(device)
+            netG.eval()
+        else:
+            sys.exit(1)
 
     print('Starting Inference...')
 
@@ -101,9 +106,12 @@ def main():
 
     # Plot the fake images from the last epoch
 
-    plt.subplot(1, 2, 2)
     plt.axis('off')
     plt.imshow(np.transpose(img_list[-1], (1, 2, 0)))
+
+    if args.dry_run:
+        exit(0)
+
     filename = args.save_file
     if filename:
         plt.savefig(filename)
