@@ -13,7 +13,7 @@ import torchvision.utils as vutils
 from torch import nn
 from torchvision import transforms
 
-from models import Generator
+from .models import Generator
 
 # Set random seed for reproducibility
 manualSeed = 777

@@ -13,7 +13,7 @@ import torch.nn.parallel
 import torch.utils.data
 import torchvision.utils as vutils
 
-from models import Generator
+from .models import Generator
 
 
 def parse_args():

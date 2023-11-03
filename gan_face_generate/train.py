@@ -15,8 +15,8 @@ from torch import nn
 from torch import optim
 from torchvision import transforms
 
-from models import Discriminator
-from models import Generator
+from .models import Discriminator
+from .models import Generator
 
 # Set random seed for reproducibility
 manualSeed = 999
