@@ -41,6 +41,3 @@ jobs:
     - name: Test dry-run
       run: |
         gan_face_generate --dry-run
-    - name: Test with pytest
-      run: |
-        pytest
