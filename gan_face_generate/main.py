@@ -88,8 +88,8 @@ def main():
 
     # Load checkpoints if arg '--dry-run' is not set
     if not args.dry_run:
-        checkpointRoot = Path('checkpoints')
-        checkpointPath = checkpointRoot / 'checkpoint.tar'
+        checkpointRoot = Path(__file__).parent
+        checkpointPath = checkpointRoot / 'weights.tar'
         if checkpointPath.exists():
             checkpoint = torch.load(checkpointPath)
             netG.load_state_dict(checkpoint['netG_state_dict'])
@@ -97,8 +97,6 @@ def main():
             netG.eval()
         else:
             sys.exit(1)
-
-    print('Starting Inference...')
 
     with torch.no_grad():
         fake = netG(fixed_noise).detach().cpu()
