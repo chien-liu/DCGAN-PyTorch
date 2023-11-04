@@ -91,7 +91,7 @@ def main():
         checkpointRoot = Path(__file__).parent
         checkpointPath = checkpointRoot / 'weights.tar'
         if checkpointPath.exists():
-            checkpoint = torch.load(checkpointPath)
+            checkpoint = torch.load(checkpointPath, map_location=device)
             netG.load_state_dict(checkpoint['netG_state_dict'])
             netG.to(device)
             netG.eval()
