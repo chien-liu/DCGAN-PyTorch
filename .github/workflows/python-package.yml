@@ -38,6 +38,6 @@ jobs:
     - name: Install package
       run: |
         python -m pip install .
-    - name: Test dry-run
+    - name: Test script
       run: |
-        gan_face_generate --dry-run
+        gan_face_generate --save-file test.jpg
