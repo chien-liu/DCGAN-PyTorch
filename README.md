@@ -1,6 +1,16 @@
 # DCGAN
 Deep Convolutional Generative Adversarial Networks (DCGAN) is a class of generative adversarial networks (GAN) introduced by Radford et. al. in the paper [Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks](https://arxiv.org/pdf/1511.06434.pdf). The generator and discriminator of DCGAN are contructed of convolutional and convolutional-transpose layers.
 
+## Usage
+Install the package (Consider installing in a virtual environment)
+```bash
+pip install gan_face_generate
+```
+
+Create your own GAN-generated face
+```bash
+gan_face_generate
+```
 
 ## Dataset
 [DigiFace-1M](https://github.com/microsoft/DigiFace1M) is a generated dataset for training face recognition models. The face images are high quality and thus are qualified to train a GAN network. There are two additional advantages of the dataset:
