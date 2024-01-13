@@ -12,6 +12,8 @@ Create your own GAN-generated face
 gan_face_generate
 ```
 
+The package works with python >= 3.9, <3.12. Check [CI Result](https://github.com/chien-liu/DCGAN-PyTorch/actions/runs/7515301223)
+
 ## Dataset
 [DigiFace-1M](https://github.com/microsoft/DigiFace1M) is a generated dataset for training face recognition models. The face images are high quality and thus are qualified to train a GAN network. There are two additional advantages of the dataset:
 
