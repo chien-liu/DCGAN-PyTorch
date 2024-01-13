@@ -41,7 +41,7 @@ def parse_args():
         help='Directory to read/write checkpoints.',
     )
     parser.add_argument(
-        '--weights', type=str, default='weights',
+        '--weights', type=str, default='gan_face_generate',
         help='Directory to write weights of generator.',
     )
     parser.add_argument(
@@ -66,7 +66,7 @@ def train():
     workers = 6
 
     # Batch size during training
-    batch_size = 128
+    batch_size = 512
 
     # Spatial size of training images. All images will be resized to this
     #   size using a transformer.
