@@ -6,16 +6,20 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 import torch.utils.data
-import torchvision.datasets as dset
 import torchvision.utils as vutils
 from torch import nn, optim
+from torch.utils.data import DataLoader
 from torchvision import transforms
 
+from gan_face_generate.dataset import DigiFace1MDataset
 from gan_face_generate.models import Discriminator, Generator
 
 
 def parse_args() -> Namespace:
-    def valid_dir(s: str) -> Path:
+    def valid_dir(s: str | None) -> Path | None:
+        if s is None:
+            return None
+
         p = Path(s)
         if not p.is_dir():
             print(f"Invalid directory. {p}")
@@ -30,7 +34,7 @@ def parse_args() -> Namespace:
         "-d",
         "--data-root",
         type=valid_dir,
-        required=True,
+        default=None,
         help="the root directory to training dataset.",
     )
     parser.add_argument(
@@ -100,7 +104,7 @@ def train() -> None:
 
     # We can use an image folder dataset the way we have it setup.
     # Create the dataset
-    dataset = dset.ImageFolder(
+    dataset = DigiFace1MDataset(
         root=dataroot,
         transform=transforms.Compose(
             [
@@ -116,7 +120,7 @@ def train() -> None:
     )
 
     # Create the dataloader
-    dataloader = torch.utils.data.DataLoader(
+    dataloader: DataLoader = torch.utils.data.DataLoader(
         dataset,
         batch_size=batch_size,
         shuffle=True,

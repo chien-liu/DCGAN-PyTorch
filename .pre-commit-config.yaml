@@ -15,5 +15,6 @@ repos:
       args:
         - --fix
         - --select=F,I,ANN
+        - --ignore=ANN401
     # Run the formatter.
     - id: ruff-format
