@@ -110,7 +110,7 @@ def main() -> None:
     plt.imshow(np.transpose(img_list[-1], (1, 2, 0)))
 
     if args.dry_run:
-        exit(0)
+        return
 
     filename = args.save_file
     if filename:
