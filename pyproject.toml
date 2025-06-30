@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gan_face_generate"
+version = "1.0.1"
+description = "Generate a random face created by DCGAN trained with DigiFace1M database"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Chien Liu", email = "chienliu6001@gmail.com" }
+]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only"
+]
+dependencies = [
+  "matplotlib>=3.8.0",
+  "numpy>=1.26.0",
+  "torch>=2.1.0",
+  "torchvision>=0.16.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pandas-stubs>=2.0.0",
+  "pre-commit>=3.0.0",
+  "mypy",
+  "ruff",
+]
+
+[project.urls]
+Homepage = "https://github.com/chien-liu/DCGAN-PyTorch"
+
+[project.scripts]
+gan_face_generate = "gan_face_generate.inference:main"
+
+[tool.setuptools.packages.find]
+exclude = ["examples*", "tools*", "docs*", "tests*"]
+
+[tool.setuptools.package-data]
+gan_face_generate = ["weights.tar"]
+
+[tool.mypy]
+ignore_missing_imports = true
+exclude = '^(examples/|tools/|docs/|tests/)'
