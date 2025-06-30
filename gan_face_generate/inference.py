@@ -1,9 +1,10 @@
 # %matplotlib inline
-from __future__ import annotations
+
 
 import argparse
 import random
 import sys
+from argparse import Namespace
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -16,8 +17,8 @@ import torchvision.utils as vutils
 from gan_face_generate.models import Generator
 
 
-def parse_args():
-    def valid_path(s: str):
+def parse_args() -> Namespace:
+    def valid_path(s: str) -> Path:
         p = Path(s)
         if not p.parent.exists():
             print(f"Parent directory {p.parent} doesn't exist.")
@@ -48,7 +49,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def main():
+def main() -> None:
     args = parse_args()
 
     # Random initialize random seed
@@ -78,7 +79,7 @@ def main():
 
     # Handle multi-GPU if desired
     if (device.type == "cuda") and (ngpu > 1):
-        netG = nn.DataParallel(netG, list(range(ngpu)))
+        netG = nn.DataParallel(netG, list(range(ngpu)))  # type:ignore [assignment]
 
     # Create batch of latent vectors that we will use to visualize
     #  the progression of the generator

@@ -6,9 +6,7 @@ The models are adapted from PyTorch Tutorial
 <https://github.com/pytorch/tutorials/blob/main/beginner_source/dcgan_faces_tutorial.py>
 """
 
-from __future__ import annotations
-
-from torch import nn
+from torch import Tensor, nn
 
 
 class Generator(nn.Module):
@@ -25,7 +23,7 @@ class Generator(nn.Module):
     ngf (int): Size of feature maps in generator.
     """
 
-    def __init__(self, ngpu, nc, nz, ngf):
+    def __init__(self, ngpu: int, nc: int, nz: int, ngf: int) -> None:
         super().__init__()
         self.ngpu = ngpu
         self.main = nn.Sequential(
@@ -51,7 +49,7 @@ class Generator(nn.Module):
             # state size. ``(nc) x 64 x 64``
         )
 
-    def forward(self, input):
+    def forward(self, input: Tensor) -> Tensor:
         return self.main(input)
 
 
@@ -67,7 +65,7 @@ class Discriminator(nn.Module):
     ndf (int): Size of feature maps in discriminator.
     """
 
-    def __init__(self, ngpu, nc, ndf):
+    def __init__(self, ngpu: int, nc: int, ndf: int) -> None:
         super().__init__()
         self.ngpu = ngpu
         self.main = nn.Sequential(
@@ -91,5 +89,5 @@ class Discriminator(nn.Module):
             nn.Sigmoid(),
         )
 
-    def forward(self, input):
+    def forward(self, input: Tensor) -> Tensor:
         return self.main(input)

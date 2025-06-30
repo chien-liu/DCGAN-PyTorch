@@ -1,26 +1,20 @@
-from __future__ import annotations
-
 import argparse
 import random
+from argparse import Namespace
 from pathlib import Path
 
-import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
-import torch.nn.parallel
 import torch.utils.data
 import torchvision.datasets as dset
 import torchvision.utils as vutils
-from IPython.display import HTML
-from torch import nn
-from torch import optim
+from torch import nn, optim
 from torchvision import transforms
 
-from gan_face_generate.models import Discriminator
-from gan_face_generate.models import Generator
+from gan_face_generate.models import Discriminator, Generator
 
 
-def parse_args():
+def parse_args() -> Namespace:
     def valid_dir(s: str) -> Path:
         p = Path(s)
         if not p.is_dir():
@@ -59,7 +53,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def train():
+def train() -> None:
     args = parse_args()
     # Set random seed for reproducibility
     manualSeed = random.randint(1, 10000)  # use if you want new results
@@ -152,15 +146,16 @@ def train():
 
     # custom weights initialization called on ``netG`` and ``netD``
 
-    def weights_init(m):
+    def weights_init(m: nn.Module) -> None:
         classname = m.__class__.__name__
         if classname.find("Conv") != -1:
-            nn.init.normal_(m.weight.data, 0.0, 0.02)
+            nn.init.normal_(m.weight.data, 0.0, 0.02)  # type: ignore [arg-type]
         elif classname.find("BatchNorm") != -1:
-            nn.init.normal_(m.weight.data, 1.0, 0.02)
-            nn.init.constant_(m.bias.data, 0)
+            nn.init.normal_(m.weight.data, 1.0, 0.02)  # type: ignore [arg-type]
+            nn.init.constant_(m.bias.data, 0)  # type: ignore [arg-type]
 
     # Create the generator
+    netG: Generator | nn.DataParallel[Generator]
     netG = Generator(ngpu, nc, nz, ngf).to(device)
 
     # Handle multi-GPU if desired
@@ -175,6 +170,7 @@ def train():
     print(netG)
 
     # Create the Discriminator
+    netD: Discriminator | nn.DataParallel[Discriminator]
     netD = Discriminator(ngpu, nc, ndf).to(device)
 
     # Handle multi-GPU if desired
@@ -373,18 +369,7 @@ def train():
     plt.legend()
     plt.show()
 
-    fig = plt.figure(figsize=(8, 8))
     plt.axis("off")
-    ims = [[plt.imshow(np.transpose(i, (1, 2, 0)), animated=True)] for i in img_list]
-    ani = animation.ArtistAnimation(
-        fig,
-        ims,
-        interval=1000,
-        repeat_delay=1000,
-        blit=True,
-    )
-
-    HTML(ani.to_jshtml())
 
     # Grab a batch of real images from the dataloader
     real_batch = next(iter(dataloader))
