@@ -3,7 +3,7 @@ name: CD - Publish Python Package to PyPI
 on:
   push:
     tags:
-      - 'v[0-9]+.[0-9]+.*'  # Match version tags like 1.0.1
+      - '[0-9]+.[0-9]+.*'  # Match version tags like 1.0.1
 
 permissions:
   contents: read
