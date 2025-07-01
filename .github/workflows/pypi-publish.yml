@@ -1,0 +1,39 @@
+name: CD - Publish Python Package to PyPI
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.*'  # Match version tags like 1.0.1
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-publish:
+    name: Build and Publish to PyPI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.11'
+
+      - name: Install build and twine
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+
+      - name: Build the package
+        run: |
+          python -m build
+
+      - name: Publish to PyPI
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: |
+          python -m twine upload dist/*
