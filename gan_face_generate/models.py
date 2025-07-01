@@ -5,13 +5,12 @@ DCGAN Models
 The models are adapted from PyTorch Tutorial
 <https://github.com/pytorch/tutorials/blob/main/beginner_source/dcgan_faces_tutorial.py>
 """
-from __future__ import annotations
 
-from torch import nn
+from torch import Tensor, nn
 
 
 class Generator(nn.Module):
-    ''' Generator of GAN
+    """Generator of GAN
     Args
     ----
     ngpu (int): Number of GPUs available. Use 0 for CPU mode.
@@ -22,9 +21,9 @@ class Generator(nn.Module):
     nz (int): Size of z latent vector (i.e. size of generator input)
 
     ngf (int): Size of feature maps in generator.
-    '''
+    """
 
-    def __init__(self, ngpu, nc, nz, ngf):
+    def __init__(self, ngpu: int, nc: int, nz: int, ngf: int) -> None:
         super().__init__()
         self.ngpu = ngpu
         self.main = nn.Sequential(
@@ -50,12 +49,12 @@ class Generator(nn.Module):
             # state size. ``(nc) x 64 x 64``
         )
 
-    def forward(self, input):
+    def forward(self, input: Tensor) -> Tensor:
         return self.main(input)
 
 
 class Discriminator(nn.Module):
-    ''' Discriminator of GAN
+    """Discriminator of GAN
     Args
     ----
     ngpu (int): Number of GPUs available. Use 0 for CPU mode.
@@ -64,9 +63,9 @@ class Discriminator(nn.Module):
               For color images this is 3, nc = 3.
 
     ndf (int): Size of feature maps in discriminator.
-    '''
+    """
 
-    def __init__(self, ngpu, nc, ndf):
+    def __init__(self, ngpu: int, nc: int, ndf: int) -> None:
         super().__init__()
         self.ngpu = ngpu
         self.main = nn.Sequential(
@@ -90,5 +89,5 @@ class Discriminator(nn.Module):
             nn.Sigmoid(),
         )
 
-    def forward(self, input):
+    def forward(self, input: Tensor) -> Tensor:
         return self.main(input)

@@ -1,6 +1,10 @@
 # Checkpoints / weights of neural network
 checkpoints/
 weights/
+*.bak
+
+# WandB
+wandb/
 
 # VSCode
 .vscode/
@@ -152,6 +156,9 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# ruff
+.ruff_cache
 
 # Pyre type checker
 .pyre/
