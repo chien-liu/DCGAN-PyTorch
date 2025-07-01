@@ -11,6 +11,7 @@ from torch import nn, optim
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
+import wandb
 from gan_face_generate.dataset import DigiFace1MDataset
 from gan_face_generate.models import Discriminator, Generator
 
@@ -203,6 +204,26 @@ def train() -> None:
     optimizerD = optim.Adam(netD.parameters(), lr=lr, betas=(beta1, 0.999))
     optimizerG = optim.Adam(netG.parameters(), lr=lr, betas=(beta1, 0.999))
 
+    # W&B init
+    run = wandb.init(
+        # Set the wandb entity where your project will be logged (generally your team name).
+        entity="chienliu6001-personal",
+        # Set the wandb project where this run will be logged.
+        project="train-DCGAN",
+        # Track hyperparameters and run metadata.
+        config={
+            "model-generator": netG.__class__.__name__,
+            "model-discriminator": netD.__class__.__name__,
+            "dataset": dataset.__class__.__name__,
+            "ngpu": ngpu,
+            "epochs": 40,
+            "learning_rate": lr,
+            "size_latent_vector": nz,
+            "size_feature_map_generator": ngf,
+            "size_feature_map_discriminator": ndf,
+        },
+    )
+
     # Training Loop
 
     # Lists to keep track of progress
@@ -322,6 +343,17 @@ def train() -> None:
                         D_G_z2,
                     ),
                 )
+                run.log(
+                    {
+                        "epoch": epoch,
+                        "training_steps": epoch * len(dataloader) + i,
+                        "loss_generator": errG.item(),
+                        "loss_discriminator": errD.item(),
+                        "D_x": D_x,
+                        "D_G_z1": D_G_z1,
+                        "D_G_z2": D_G_z2,
+                    }
+                )
 
             # Save Losses for plotting later
             G_losses.append(errG.item())
@@ -333,13 +365,14 @@ def train() -> None:
             ):
                 with torch.no_grad():
                     fake = netG(fixed_noise).detach().cpu()
-                img_list.append(
-                    vutils.make_grid(
-                        fake,
-                        padding=2,
-                        normalize=True,
-                    ),
+                img_grid = vutils.make_grid(
+                    fake,
+                    padding=2,
+                    normalize=True,
                 )
+                wandb.log({"Generated Images": wandb.Image(img_grid)})
+
+                img_list.append(img_grid)
 
                 torch.save(
                     {
@@ -361,6 +394,12 @@ def train() -> None:
                     },
                     weightPath,
                 )
+
+                # Upload with W&B Artifacts
+                artifact = wandb.Artifact("gan-checkpoint", type="model")
+                artifact.add_file(str(checkpointPath))
+                artifact.add_file(str(weightPath))
+                wandb.log_artifact(artifact)
 
             iters += 1
 

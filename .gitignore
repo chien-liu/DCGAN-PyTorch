@@ -1,6 +1,10 @@
 # Checkpoints / weights of neural network
 checkpoints/
 weights/
+*.bak
+
+# WandB
+wandb/
 
 # VSCode
 .vscode/
